@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>World Library</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f5f7fb;color:#172033}
+header{background:#172033;color:white;padding:22px 6%;display:flex;justify-content:space-between;align-items:center;gap:20px}
+.logo{font-size:25px;font-weight:700}.tag{opacity:.8;font-size:14px}
+.hero{padding:55px 6%;background:linear-gradient(135deg,#243b64,#4169a1);color:white}
+.hero h1{font-size:42px;margin:0 0 12px}.hero p{max-width:650px;line-height:1.6}
+.search{width:100%;max-width:700px;padding:15px 18px;border:0;border-radius:12px;font-size:16px;margin-top:15px}
+main{padding:35px 6%}.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:25px}
+button{border:0;border-radius:9px;padding:10px 15px;cursor:pointer;background:#e5eaf3;color:#172033}
+button.active,button:hover{background:#243b64;color:white}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
+.card{background:white;border-radius:15px;padding:20px;box-shadow:0 4px 15px #00000010}
+.cover{height:190px;border-radius:10px;background:#dbe4f4;display:flex;align-items:center;justify-content:center;font-size:55px;margin-bottom:15px}
+.card h3{margin:8px 0}.meta{color:#667085;font-size:14px}.read{margin-top:15px;background:#243b64;color:white;width:100%}
+#reader{display:none;position:fixed;inset:0;background:white;z-index:5;overflow:auto;padding:30px 7%}
+.close{float:right;background:#172033;color:white}.booktext{max-width:750px;margin:50px auto;font-family:Georgia,serif;font-size:19px;line-height:1.8}
+footer{text-align:center;padding:30px;color:#667085}
+</style>
+</head>
+<body>
+<header><div class="logo">📚 World Library</div><div class="tag">Read books that are legally available</div></header>
+
+<section class="hero">
+<h1>A world of books, in one place.</h1>
+<p>Search a small starter collection of public-domain and openly available books. This demo can be expanded with a legal book API or licensed catalog.</p>
+<input id="search" class="search" placeholder="Search books, authors or categories..." oninput="render()">
+</section>
+
+<main>
+<div class="filters">
+<button class="active" onclick="filterCat('All',this)">All</button>
+<button onclick="filterCat('Fiction',this)">Fiction</button>
+<button onclick="filterCat('Science',this)">Science</button>
+<button onclick="filterCat('History',this)">History</button>
+<button onclick="filterCat('Philosophy',this)">Philosophy</button>
+</div>
+<div id="grid" class="grid"></div>
+</main>
+
+<div id="reader">
+<button class="close" onclick="closeReader()">✕ Close</button>
+<div class="booktext">
+<h1 id="readerTitle"></h1>
+<p id="readerAuthor"></p>
+<hr>
+<p id="readerBody"></p>
+<p><b>Demo note:</b> This reader displays sample/public-domain-style content. Full copyrighted books should only be added when you have permission or a legal open/public-domain source.</p>
+</div>
+</div>
+
+<footer>© 2026 World Library Demo · Use only public-domain, openly licensed, or permissioned books.</footer>
+
+<script>
+const books=[
+ {title:"Pride and Prejudice",author:"Jane Austen",cat:"Fiction",icon:"📕",text:"This is a reader demo for a public-domain classic. Replace this sample with text retrieved from a legitimate public-domain source."},
+ {title:"The Adventures of Sherlock Holmes",author:"Arthur Conan Doyle",cat:"Fiction",icon:"🔎",text:"This is a reader demo. A production version can connect each title to a legitimate public-domain text source."},
+ {title:"On the Origin of Species",author:"Charles Darwin",cat:"Science",icon:"🧬",text:"This is a sample reader page. Scientific classics that are in the public domain can be provided through a lawful source."},
+ {title:"The Republic",author:"Plato",cat:"Philosophy",icon:"🏛️",text:"This is a sample reader page. The full work should be loaded from a lawful public-domain or licensed source."},
+ {title:"The Art of War",author:"Sun Tzu",cat:"History",icon:"📜",text:"This is a sample reader page. A complete edition can be linked from a legitimate open source."},
+ {title:"Frankenstein",author:"Mary Shelley",cat:"Fiction",icon:"⚡",text:"This is a reader demo for a classic work. Public-domain editions can be connected legally."}
+];
+let category="All";
+function filterCat(c,btn){category=c;document.querySelectorAll('.filters button').forEach(x=>x.classList.remove('active'));btn.classList.add('active');render()}
+function render(){
+ const q=document.getElementById('search').value.toLowerCase();
+ const items=books.filter(b=>(category==="All"||b.cat===category)&&
+ (b.title.toLowerCase().includes(q)||b.author.toLowerCase().includes(q)||b.cat.toLowerCase().includes(q)));
+ document.getElementById('grid').innerHTML=items.map((b,i)=>`
+ <article class="card"><div class="cover">${b.icon}</div><div class="meta">${b.cat}</div>
+ <h3>${b.title}</h3><div class="meta">${b.author}</div>
+ <button class="read" onclick="openReader(${books.indexOf(b)})">Read</button></article>`).join('') ||
+ '<p>No books found.</p>';
+}
+function openReader(i){let b=books[i];document.getElementById('readerTitle').textContent=b.title;document.getElementById('readerAuthor').textContent='By '+b.author;document.getElementById('readerBody').textContent=b.text;document.getElementById('reader').style.display='block'}
+function closeReader(){document.getElementById('reader').style.display='none'}
+render();
+</script>
+</body>
+</html>
