@@ -22,8 +22,8 @@
     header {
       background: #172033;
       color: white;
-      padding: 20px;
       text-align: center;
+      padding: 25px 15px;
     }
 
     header h1 {
@@ -33,35 +33,37 @@
 
     header p {
       color: #cbd5e1;
+      font-size: 15px;
     }
 
     .container {
-      max-width: 1000px;
+      max-width: 900px;
       margin: auto;
-      padding: 30px 20px;
+      padding: 25px 15px;
     }
 
     .hero {
       text-align: center;
-      padding: 40px 10px;
+      padding: 35px 10px;
     }
 
     .hero h2 {
-      font-size: 36px;
-      margin-bottom: 15px;
+      font-size: 34px;
+      margin-bottom: 12px;
     }
 
     .hero p {
-      font-size: 18px;
+      font-size: 17px;
       color: #64748b;
+      line-height: 1.5;
     }
 
     .search-box {
       background: white;
-      padding: 25px;
+      padding: 22px;
       border-radius: 15px;
       box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-      margin-top: 25px;
+      margin-top: 20px;
     }
 
     textarea {
@@ -100,22 +102,27 @@
       background: #eff6ff;
       border-left: 5px solid #2563eb;
       border-radius: 8px;
-      display: none;
       line-height: 1.6;
+      display: none;
+    }
+
+    #answer h3 {
+      margin-bottom: 10px;
+      color: #2563eb;
     }
 
     .cards {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
+      gap: 15px;
       margin-top: 35px;
     }
 
     .card {
       background: white;
-      padding: 25px;
+      padding: 22px;
       border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.07);
     }
 
     .card h3 {
@@ -123,4 +130,152 @@
       color: #2563eb;
     }
 
-    .card
+    .card p {
+      color: #64748b;
+      line-height: 1.5;
+    }
+
+    .disclaimer {
+      text-align: center;
+      margin-top: 35px;
+      padding: 15px;
+      color: #64748b;
+      font-size: 13px;
+    }
+
+    @media (max-width: 600px) {
+      .hero h2 {
+        font-size: 28px;
+      }
+
+      header h1 {
+        font-size: 25px;
+      }
+
+      .search-box {
+        padding: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>⚖️ Legal AI Platform</h1>
+    <p>Your simple AI-powered legal information assistant</p>
+  </header>
+
+  <main class="container">
+
+    <section class="hero">
+      <h2>Ask Your Legal Question</h2>
+      <p>
+        Describe your legal question below and get helpful general legal information.
+      </p>
+
+      <div class="search-box">
+
+        <textarea
+          id="question"
+          placeholder="Example: What should I do if I receive a parking ticket?"
+        ></textarea>
+
+        <button onclick="getAnswer()">Ask Legal AI</button>
+
+        <div id="answer"></div>
+
+      </div>
+    </section>
+
+    <section class="cards">
+
+      <div class="card">
+        <h3>📄 Legal Information</h3>
+        <p>
+          Get simple explanations of common legal topics and procedures.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>🔍 Easy to Use</h3>
+        <p>
+          Type your question in plain language and receive an easy-to-understand response.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>⚖️ General Guidance</h3>
+        <p>
+          Learn about general legal concepts, rights, and possible next steps.
+        </p>
+      </div>
+
+    </section>
+
+    <div class="disclaimer">
+      ⚠️ This website provides general legal information and is not a substitute
+      for advice from a qualified lawyer.
+    </div>
+
+  </main>
+
+  <script>
+    function getAnswer() {
+
+      const question = document.getElementById("question").value.trim();
+      const answer = document.getElementById("answer");
+
+      if (question === "") {
+        answer.style.display = "block";
+        answer.innerHTML =
+          "<h3>Please enter a question</h3>" +
+          "<p>Type your legal question in the box above.</p>";
+        return;
+      }
+
+      let response =
+        "Thank you for your question. Here is some general legal information that may help you. " +
+        "The exact answer depends on your location and the specific facts of your situation. " +
+        "For an important legal matter, consider speaking with a qualified lawyer.";
+
+      const q = question.toLowerCase();
+
+      if (q.includes("ticket") || q.includes("parking")) {
+        response =
+          "If you received a parking or traffic ticket, first check the ticket for the deadline to pay or contest it. " +
+          "Keep copies of the ticket and any evidence such as photographs. " +
+          "The rules and deadlines depend on your location.";
+      }
+
+      else if (q.includes("rent") || q.includes("landlord")) {
+        response =
+          "For a landlord or rental issue, keep copies of your lease, notices, messages, and payment records. " +
+          "Tenant rights vary significantly by location, so check the laws that apply where you live.";
+      }
+
+      else if (q.includes("job") || q.includes("work") || q.includes("employer")) {
+        response =
+          "Employment laws can depend on your location and the circumstances. " +
+          "Keep relevant emails, messages, contracts, and other records. " +
+          "For serious employment disputes, consider getting advice from an employment lawyer.";
+      }
+
+      else if (q.includes("court") || q.includes("lawsuit")) {
+        response =
+          "If you have received court papers, do not ignore them. " +
+          "Check the documents carefully for deadlines and court dates, and keep all related paperwork. " +
+          "Because missing a deadline can have serious consequences, consider contacting a lawyer promptly.";
+      }
+
+      answer.style.display = "block";
+
+      answer.innerHTML =
+        "<h3>⚖️ Legal AI Response</h3>" +
+        "<p>" + response + "</p>";
+    }
+  </script>
+
+</body>
+</html>
+    
